@@ -60,7 +60,7 @@ def ask_library_chatbot(user_question):
     return response.text
 ```
 # 3.客服前端網頁 (chatbot.html)
-簡短介紹：精美的對話框前端網頁 UI。利用 JavaScript 監聽「發送」按鈕，透過 AJAX (Fetch API) 與 Django 後端進行非同步異步通訊，讓使用者免刷新網頁即可與 AI 機器人即時對話。
+介紹：精美的對話框前端網頁 UI。利用 JavaScript 監聽「發送」按鈕，透過 AJAX (Fetch API) 與 Django 後端進行非同步異步通訊，讓使用者免刷新網頁即可與 AI 機器人即時對話。
 ```HTML
 <!-- 簡化版對話框核心架構 -->
 <div class="chat-container">
@@ -98,3 +98,41 @@ document.getElementById('send-btn').addEventListener('click', function() {
 });
 </script>
 ```
+# 4.路由總管 (urls.py)
+介紹：專案的網址導向地圖。負責定義網頁的網址路徑（例如 /chat/），當使用者在瀏覽器輸入網址時，它會引導系統找到對應的視圖邏輯來處理。
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('chat/', views.chatbot_page, name='chatbot_page'),
+    path('api/chat/', views.chatbot_api, name='chatbot_api'),
+]
+```
+# 4. 🎬控制中樞 (views.py)
+介紹：負責處理網頁請求（Request）與回應（Response）的後端邏輯。當前端 Fetch 傳送使用者的問題過來時，它會呼叫 chatbot.py 獲取 Gemini 的回答，再用 JSON 格式傳回給前端網頁。
+```python
+from django.shortcuts import render
+from django.http import JsonResponse
+from .chatbot import ask_library_chatbot
+import json
+
+def chatbot_page(request):
+    # 渲染前端 HTML 對話介面
+    return render(request, 'catalog/chatbot.html')
+
+def chatbot_api(request):
+    # 接收前端 JavaScript 傳來的問題，並回傳 AI 的解答
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user_question = data.get('question', '')
+        ai_answer = ask_library_chatbot(user_question)
+        return JsonResponse({'answer': ai_answer})
+```
+# 5.  專案中央設定 (settings.py)
+介紹：整個 Django 專案的總設定檔。用來註冊我們自己建立的 catalog 應用程式、設定資料庫（SQLite3）的路徑，以及控管專案的安全密鑰與密碼規範。
+
+# 6.  知識庫規章 (library_rules.txt)
+介紹：本專案的 RAG 核心知識庫。裡面記錄了電子圖書館的所有借還書、逾期罰金（每日 5 元）與書籍遺失賠償（兩倍金額）等文字規範，供 Gemini API 檢索並作為回答的唯一依據。
+
+
