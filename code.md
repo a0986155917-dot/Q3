@@ -64,7 +64,7 @@ def ask_library_chatbot(user_question):
 ```HTML
 <!-- 簡化版對話框核心架構 -->
 <div class="chat-container">
-    <div class="chat-header">🤖 電子圖書館 - AI 智能客服</div>
+    <div class="chat-header"> 電子圖書館 - AI 智能客服</div>
     <div id="chat-box" class="chat-box">
         <div class="bot-msg">您好！我是圖書館 AI 助手，請提問任何關於借還書規章的問題。</div>
     </div>
