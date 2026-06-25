@@ -1,4 +1,4 @@
-# 1.  資料庫模型 (models.py)
+#1. 資料庫模型 (models.py)
 # 介紹：定義圖書館的「借閱紀錄」資料表。包含借閱人、書籍、借出/應還日期，並透過 Python 的 `is_overdue` 計算書籍是否已經過期。
 ```python
 from django.db import models
@@ -14,12 +14,9 @@ from django.db import models
 
     @property
     def is_overdue(self):
-        # 判斷是否過期：若未還且今天已超過應還日期，則為 True
         if not self.return_date and date.today() > self.due_date:
             return True
         return False
 
     def __str__(self):
         return f"{self.user.username} 借了 {self.book.title}"
-
-        ```
